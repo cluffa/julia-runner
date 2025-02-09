@@ -73,6 +73,20 @@ class JuliaRunnerServer {
             properties: {},
             required: [],
           },
+        },
+        {
+          name: 'get_julia_documentation',
+          description: 'Get documentation for a Julia function',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              function_name: {
+                type: 'string',
+                description: 'Name of the Julia function',
+              },
+            },
+            required: ['function_name'],
+          },
         }
       ],
     }));
@@ -157,6 +171,35 @@ class JuliaRunnerServer {
               {
                 type: 'text',
                 text: `Error getting installed Julia packages: ${error}`,
+              },
+            ],
+            isError: true,
+          };
+        }
+      } else if (request.params.name === 'get_julia_documentation') {
+        const functionName = String(request.params.arguments?.function_name);
+        if (!functionName) {
+          throw new McpError(ErrorCode.InvalidParams, 'Function name is required');
+        }
+
+        try {
+          const code = `using Pkg; Pkg.activate("${projectDir}"); println(@doc ${functionName})`;
+          const result = await this.executeJuliaCode(code, projectDir);
+          return {
+            content: [
+              {
+                type: 'text',
+                text: result,
+              },
+            ],
+          };
+        } catch (error) {
+          console.error('Error getting Julia documentation:', error);
+          return {
+            content: [
+              {
+                type: 'text',
+                text: `Error getting Julia documentation: ${error}`,
               },
             ],
             isError: true,
