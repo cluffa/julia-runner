@@ -1,29 +1,22 @@
 # julia-runner MCP Server
 
-A Model Context Protocol server
+A Model Context Protocol server for interacting with Julia.
 
-This is a TypeScript-based MCP server that implements a simple notes system. It demonstrates core MCP concepts by providing:
+## Available Tools
 
-- Resources representing text notes with URIs and metadata
-- Tools for creating new notes
-- Prompts for generating summaries of notes
+This server provides the following tools:
 
-## Features
-
-### Resources
-- List and access notes via `note://` URIs
-- Each note has a title, content and metadata
-- Plain text mime type for simple content access
-
-### Tools
-- `create_note` - Create new text notes
-  - Takes title and content as required parameters
-  - Stores note in server state
-
-### Prompts
-- `summarize_notes` - Generate a summary of all stored notes
-  - Includes all note contents as embedded resources
-  - Returns structured prompt for LLM summarization
+- `execute_julia`: Execute Julia code.
+  - Input parameters:
+    - `code` (string, required): The Julia code to execute.
+- `add_julia_package`: Add a Julia package to the project.
+  - Input parameters:
+    - `package_name` (string, required): The name of the Julia package to add.
+- `get_installed_julia_packages`: Get the list of installed Julia packages.
+  - Input parameters: None
+- `get_julia_documentation`: Get documentation for a Julia function.
+  - Input parameters:
+    - `function_name` (string, required): The name of the Julia function.
 
 ## Development
 
