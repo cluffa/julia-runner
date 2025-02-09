@@ -20,7 +20,55 @@ class JuliaRunnerServer {
       },
       {
         capabilities: {
-          tools: {},
+          tools: {
+            execute_julia: {
+              description: 'Execute Julia code',
+              inputSchema: {
+                type: 'object',
+                properties: {
+                  code: {
+                    type: 'string',
+                    description: 'Julia code to execute',
+                  },
+                },
+                required: ['code'],
+              },
+            },
+            add_julia_package: {
+              description: 'Add a Julia package to the project',
+              inputSchema: {
+                type: 'object',
+                properties: {
+                  package_name: {
+                    type: 'string',
+                    description: 'Name of the Julia package to add',
+                  },
+                },
+                required: ['package_name'],
+              },
+            },
+            get_installed_julia_packages: {
+              description: 'Get the list of installed Julia packages',
+              inputSchema: {
+                type: 'object',
+                properties: {},
+                required: [],
+              },
+            },
+            get_julia_documentation: {
+              description: 'Get documentation for a Julia function',
+              inputSchema: {
+                type: 'object',
+                properties: {
+                  function_name: {
+                    type: 'string',
+                    description: 'Name of the Julia function',
+                  },
+                },
+                required: ['function_name'],
+              },
+            },
+          },
         },
       }
     );
