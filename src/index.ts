@@ -65,6 +65,15 @@ class JuliaRunnerServer {
             required: ['package_name'],
           },
         },
+        {
+          name: 'get_installed_julia_packages',
+          description: 'Get the list of installed Julia packages',
+          inputSchema: {
+            type: 'object',
+            properties: {},
+            required: [],
+          },
+        }
       ],
     }));
 
@@ -124,6 +133,30 @@ class JuliaRunnerServer {
               {
                 type: 'text',
                 text: `Error adding Julia package: ${error}`,
+              },
+            ],
+            isError: true,
+          };
+        }
+      } else if (request.params.name === 'get_installed_julia_packages') {
+        try {
+          const code = `using Pkg; Pkg.activate("${projectDir}"); Pkg.status()`;
+          const result = await this.executeJuliaCode(code, projectDir);
+          return {
+            content: [
+              {
+                type: 'text',
+                text: result,
+              },
+            ],
+          };
+        } catch (error) {
+          console.error('Error getting installed Julia packages:', error);
+          return {
+            content: [
+              {
+                type: 'text',
+                text: `Error getting installed Julia packages: ${error}`,
               },
             ],
             isError: true,
